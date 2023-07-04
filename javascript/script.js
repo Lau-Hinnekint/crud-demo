@@ -16,10 +16,15 @@ function updatePrice(idArticle, price) {
     document.querySelector('[data-price-id="' + idArticle + '"]').innerText = price;
 }
 
+function getCsrfToken() {
+    return document.querySelector('#token-csrf').value;
+}
+
 function increasePrice(idArticle) {
     const data = {
         action: 'increase',
-        idArticle: idArticle
+        idArticle: idArticle,
+        token: getCsrfToken()
     };
 
     return callAPI('PUT', data);
