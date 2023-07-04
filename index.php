@@ -6,62 +6,52 @@ session_start();
 
 $_SESSION['token'] = md5(uniqid(mt_rand(), true));
 
+$pageTitle = 'Test CRUD';
+include 'includes/_header.php';
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<h1><?= $pageTitle ?></h1>
+<?php
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test CRUD</title>
-</head>
+if (array_key_exists('msg', $_GET)) {
+    echo '<p>' . $_GET['msg'] . '</p>';
+}
 
-<body>
-    <h1>TEST CRUD</h1>
-    <?php
+?>
+<form action="actions.php" method="post">
+    <h2>Ajouter une bière</h2>
+    <div>
+        <label for="add-name">Nom de la bière :</label>
+        <input type="text" name="name" id="add-name">
+    </div>
+    <div>
+        <label for="add-price">Prix :</label>
+        <input type="text" name="price" id="add-price">
+    </div>
+    <input type="hidden" name="action" id="" value="add">
+    <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" id="token-csrf">
+    <input type="submit" value="Ajouter">
+</form>
 
-    if (array_key_exists('msg', $_GET)) {
-        echo '<p>' . $_GET['msg'] . '</p>';
-    }
+<section>
+    <h2>Toutes les bières</h2>
+    <ul>
+        <?php
 
-    ?>
-    <form action="actions.php" method="post">
-        <div>
-            <label for="add-name">Nom de la bière :</label>
-            <input type="text" name="name" id="add-name">
-        </div>
-        <div>
-            <label for="add-price">Prix :</label>
-            <input type="text" name="price" id="add-price">
-        </div>
-        <input type="hidden" name="action" id="" value="add">
-        <input type="hidden" name="token" value="<?= $_SESSION['token'] ?>" id="token-csrf">
-        <input type="submit" value="Ajouter">
-    </form>
+        $query = $dbCo->prepare("SELECT id_article, article_name AS name, purchase_price AS price FROM article;");
+        $isOk = $query->execute();
 
-    <?php
+        $articles = $query->fetchAll();
 
-    $query = $dbCo->prepare("SELECT id_article, article_name AS name, purchase_price AS price FROM article;");
-    $isOk = $query->execute();
-    // $query = $dbCo->query("SELECT article_name AS name, purchase_price AS price FROM article;");
-    // $isOk = $query->execute();
-
-    // var_dump($isOk); 
-    // var_dump($dbCo->lastInsertId());
-    // var_dump($query->rowCount());
-
-    $articles = $query->fetchAll();
-
-    echo '<ul>';
-    foreach ($articles as $article) {
-        echo '<li>' . $article['name'] . ' <span data-price-id="' . $article['id_article'] . '">' . $article['price'] . '</span> €
-        <button type="button" class="js-btn-increase" data-id="' . $article['id_article'] . '">+</a>
+        foreach ($articles as $article) {
+            echo '<li>' . $article['name'] . ' <span data-price-id="' . $article['id_article'] . '">' . $article['price'] . '</span> €
+                <button type="button" class="js-btn-increase" data-id="' . $article['id_article'] . '">+</a>
         </li>';
-    }
-    // <a href="actions.php?action=increase&id=' . $article['id_article'] . '">+</a>
-    echo '</ul>';
-    ?>
-    <script src="javascript/script.js"></script>
-</body>
+        }
 
-</html>
+        ?>
+    </ul>
+</section>
+<?php
+
+include 'includes/_footer.php';
