@@ -45,7 +45,7 @@ if (array_key_exists('msg', $_GET)) {
 
         foreach ($articles as $article) {
             echo '<li>' . $article['name'] . ' <span data-price-id="' . $article['id_article'] . '">' . $article['price'] . '</span> €
-                <button type="button" class="js-btn-increase" data-id="' . $article['id_article'] . '">+</a>
+                <button type="button" class="js-btn-increase" data-id="' . $article['id_article'] . '">+</button>
         </li>';
         }
 

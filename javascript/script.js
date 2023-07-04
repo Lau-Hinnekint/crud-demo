@@ -16,15 +16,19 @@ function updatePrice(idArticle, price) {
     document.querySelector('[data-price-id="' + idArticle + '"]').innerText = price;
 }
 
-async function increasePrice(idArticle) {
+function increasePrice(idArticle) {
     const data = {
         action: 'increase',
         idArticle: idArticle
     };
 
+    return callAPI('PUT', data);
+}
+
+async function callAPI(method, data) {
     try {
         const response = await fetch("api.php", {
-            method: 'PUT',
+            method: method,
             headers: {
                 'Content-Type': 'application/json'
             },
