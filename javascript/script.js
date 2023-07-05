@@ -26,14 +26,9 @@ document.querySelectorAll('.js-btn-rename').forEach(btn => {
             e.preventDefault();
             renameArticle(e.target.dataset.formId, form.querySelector('input[name="articleName"]').value)
                 .then(apiResponse => {
-                    if (!apiResponse.result) {
-                        console.error('Erreur lors du renommage.');
-                        form.remove();
-                        document.querySelector(`.js-btn-rename[data-id="${apiResponse.idArticle}"]`).classList.remove('hidden');
-                        return;
-                    }
+                    if (apiResponse.result) updateArticleName(apiResponse.idArticle, apiResponse.articleName);
+                    else console.error('Erreur lors du renommage.');
                     
-                    updateArticleName(apiResponse.idArticle, apiResponse.articleName);
                     form.remove();
                     document.querySelector(`.js-btn-rename[data-id="${apiResponse.idArticle}"]`).classList.remove('hidden');
                 });
