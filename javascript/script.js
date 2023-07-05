@@ -12,6 +12,43 @@ document.querySelectorAll('.js-btn-increase').forEach(btn => {
     });
 });
 
+document.querySelectorAll('.js-btn-rename').forEach(btn => {
+    btn.addEventListener('click', e => {
+        e.target.classList.add('hidden');
+        const li = e.target.closest('li');
+        const id = e.target.dataset.id;
+        const name = li.querySelector(`[data-name-id="${id}"]`).innerText;
+
+        const form = createForm(id, name);
+        li.appendChild(form);
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            renameArticle(e.target.dataset.formId, form.querySelector('input[name="articleName"]').value)
+                .then(apiResponse => {
+                    if (apiResponse.result) updateArticleName(apiResponse.idArticle, apiResponse.articleName);
+                    else console.error('Erreur lors du renommage.');
+                    
+                    form.remove();
+                    document.querySelector(`.js-btn-rename[data-id="${apiResponse.idArticle}"]`).classList.remove('hidden');
+                });
+        });
+    });
+});
+
+function updateArticleName(id, name) {
+    document.querySelector(`[data-name-id="${id}"]`).innerText = name;
+}
+
+function createForm(id, name) {
+    const form = document.querySelector("#renameFormTemplate").content.cloneNode(true);
+
+    form.querySelector('[name="articleName"]').value = name;
+    form.querySelector('[name="idArticle"]').value = id;
+    form.querySelector('form').dataset.formId = id;
+    return form.querySelector('form');
+}
+
 function updatePrice(idArticle, price) {
     document.querySelector('[data-price-id="' + idArticle + '"]').innerText = price;
 }
@@ -21,13 +58,20 @@ function getCsrfToken() {
 }
 
 function increasePrice(idArticle) {
-    const data = {
+    return callAPI('PUT', {
         action: 'increase',
         idArticle: idArticle,
         token: getCsrfToken()
-    };
+    });
+}
 
-    return callAPI('PUT', data);
+function renameArticle(idArticle, articleName) {
+    return callAPI('PUT', {
+        action: 'rename',
+        idArticle: idArticle,
+        articleName: articleName,
+        token: getCsrfToken()
+    });
 }
 
 async function callAPI(method, data) {

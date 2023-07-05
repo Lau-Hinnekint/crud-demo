@@ -7,6 +7,9 @@ session_start();
 $_SESSION['token'] = md5(uniqid(mt_rand(), true));
 
 $pageTitle = 'Test CRUD';
+$cssFiles = [
+    'css/style.css'
+];
 include 'includes/_header.php';
 
 ?>
@@ -44,14 +47,26 @@ if (array_key_exists('msg', $_GET)) {
         $articles = $query->fetchAll();
 
         foreach ($articles as $article) {
-            echo '<li>' . $article['name'] . ' <span data-price-id="' . $article['id_article'] . '">' . $article['price'] . '</span> €
+            echo '<li>
+                <span data-name-id="' . $article['id_article'] . '">' . $article['name'] . '</span>
+                <span data-price-id="' . $article['id_article'] . '">' . $article['price'] . '</span> €
                 <button type="button" class="js-btn-increase" data-id="' . $article['id_article'] . '">+</button>
+                <button type="button" class="js-btn-rename" data-id="' . $article['id_article'] . '">renommer</button>
         </li>';
         }
 
         ?>
     </ul>
 </section>
+
+<template id="renameFormTemplate">
+    <form action="" method="post" data-form-id="">
+        <input type="text" name="articleName" value="">
+        <input type="hidden" name="idArticle" value="">
+        <input type="submit" value="valider">
+    </form>
+</template>
+
 <?php
 
 include 'includes/_footer.php';
