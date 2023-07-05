@@ -10,8 +10,10 @@ $data = json_decode(file_get_contents('php://input'), true);
 
 $isOk = false;
 
-if (!array_key_exists('token', $_SESSION) || !array_key_exists('token', $data)
-    || $_SESSION['token'] !== $data['token']) {
+if (
+    !array_key_exists('token', $_SESSION) || !array_key_exists('token', $data)
+    || $_SESSION['token'] !== $data['token']
+) {
     echo json_encode([
         'result' => 'false',
         'error' => 'Accès refusé, jeton invalide.'
@@ -44,8 +46,6 @@ if ($data['action'] === 'increase' && $_SERVER['REQUEST_METHOD'] === 'PUT') {
     exit;
 }
 
-
-
 if ($data['action'] === 'rename' && $_SERVER['REQUEST_METHOD'] === 'PUT') {
     $id = intval(strip_tags($data['idArticle']));
     $name = trim(strip_tags($data['articleName']));
@@ -61,4 +61,3 @@ if ($data['action'] === 'rename' && $_SERVER['REQUEST_METHOD'] === 'PUT') {
     ]);
     exit;
 }
-

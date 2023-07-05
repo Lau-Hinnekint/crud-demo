@@ -55,6 +55,15 @@ if (array_key_exists('msg', $_GET)) {
         ?>
     </ul>
 </section>
+
+<template id="renameFormTemplate">
+    <form action="" method="post" data-form-id="">
+        <input type="text" name="articleName" value="">
+        <input type="hidden" name="idArticle" value="">
+        <input type="submit" value="valider">
+    </form>
+</template>
+
 <?php
 
 include 'includes/_footer.php';
