@@ -7,6 +7,9 @@ session_start();
 $_SESSION['token'] = md5(uniqid(mt_rand(), true));
 
 $pageTitle = 'Test CRUD';
+$cssFiles = [
+    'css/style.css'
+];
 include 'includes/_header.php';
 
 ?>
