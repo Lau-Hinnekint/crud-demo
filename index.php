@@ -44,8 +44,11 @@ if (array_key_exists('msg', $_GET)) {
         $articles = $query->fetchAll();
 
         foreach ($articles as $article) {
-            echo '<li>' . $article['name'] . ' <span data-price-id="' . $article['id_article'] . '">' . $article['price'] . '</span> €
+            echo '<li>
+                <span data-name-id="' . $article['id_article'] . '">' . $article['name'] . '</span>
+                <span data-price-id="' . $article['id_article'] . '">' . $article['price'] . '</span> €
                 <button type="button" class="js-btn-increase" data-id="' . $article['id_article'] . '">+</button>
+                <button type="button" class="js-btn-rename" data-id="' . $article['id_article'] . '">renommer</button>
         </li>';
         }
 
